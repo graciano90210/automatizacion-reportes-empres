@@ -315,7 +315,7 @@ class ReportePDF:
         c.setFillColor(COLOR_ACCENT)
         c.rect(self.MARGEN, self.y - 5, self.ancho - 2 * self.MARGEN, 20,
                fill=True, stroke=False)
-        c.setFillColor(COLOR_HEADER)
+        c.setFillColor(COLOR_TEXTO)
         c.setFont('Helvetica-Bold', 11)
         c.drawString(self.MARGEN + 8, self.y + 1, titulo)
 
@@ -338,7 +338,7 @@ class ReportePDF:
         items = [
             ("ABONOS", abonos, COLOR_VERDE),
             ("DESEMBOLSOS", desembolsos, COLOR_ROJO),
-            ("TOTAL CAJA", total_caja, COLOR_HEADER),
+            ("TOTAL CAJA", total_caja, COLOR_SUBHEADER),
         ]
 
         for i, (label, valor, color) in enumerate(items):
@@ -501,31 +501,27 @@ class ReportePDF:
                 ('ALIGN', (3, 0), (3, -1), 'CENTER'),
             ]
 
-            COLOR_VERDE_CLARO = colors.HexColor('#00331A')
-            COLOR_VERDE_TEXTO = COLOR_VERDE
-            COLOR_AMARILLO_CLARO = colors.HexColor('#332B00')
-            COLOR_AMARILLO_TEXTO = COLOR_AMARILLO
-            COLOR_ROJO_CLARO = colors.HexColor('#4A0B16')
-            COLOR_ROJO_TEXTO = COLOR_ROJO
-
             for i in range(1, len(tabla_data)):
                 try:
                     dias = int(tabla_data[i][3])
                     if dias <= 2:
-                        bg_color = COLOR_VERDE_CLARO
-                        txt_color = COLOR_VERDE_TEXTO
+                        neon_color = COLOR_VERDE
                     elif 3 <= dias <= 5:
-                        bg_color = COLOR_AMARILLO_CLARO
-                        txt_color = COLOR_AMARILLO_TEXTO
+                        neon_color = COLOR_AMARILLO
                     else:
-                        bg_color = COLOR_ROJO_CLARO
-                        txt_color = COLOR_ROJO_TEXTO
+                        neon_color = COLOR_ROJO
+                    
+                    bg_color = COLOR_FILA_ALT if i % 2 == 0 else COLOR_FONDO
+                    estilos.append(('BACKGROUND', (0, i), (-1, i), bg_color))
+                    estilos.append(('TEXTCOLOR', (0, i), (-1, i), COLOR_TEXTO))
+                    # Recuadro neón envolviendo el nombre del cliente
+                    estilos.append(('BOX', (2, i), (2, i), 1.5, neon_color))
+                    # El dígito con los días en color neón
+                    estilos.append(('TEXTCOLOR', (3, i), (3, i), neon_color))
                 except:
                     bg_color = COLOR_FILA_ALT if i % 2 == 0 else COLOR_FONDO
-                    txt_color = COLOR_TEXTO
-                    
-                estilos.append(('BACKGROUND', (0, i), (-1, i), bg_color))
-                estilos.append(('TEXTCOLOR', (0, i), (-1, i), txt_color))
+                    estilos.append(('BACKGROUND', (0, i), (-1, i), bg_color))
+                    estilos.append(('TEXTCOLOR', (0, i), (-1, i), COLOR_TEXTO))
 
             tabla.setStyle(TableStyle(estilos))
             w, h = tabla.wrapOn(self.c, self.ancho, self.alto)
