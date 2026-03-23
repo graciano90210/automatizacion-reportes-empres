@@ -513,15 +513,16 @@ class ReportePDF:
                     
                     bg_color = COLOR_FILA_ALT if i % 2 == 0 else COLOR_FONDO
                     estilos.append(('BACKGROUND', (0, i), (-1, i), bg_color))
-                    estilos.append(('TEXTCOLOR', (0, i), (-1, i), COLOR_TEXTO))
-                    # Recuadro neón envolviendo el nombre del cliente
-                    estilos.append(('BOX', (2, i), (2, i), 1.5, neon_color))
-                    # El dígito con los días en color neón
-                    estilos.append(('TEXTCOLOR', (3, i), (3, i), neon_color))
+                    estilos.append(('TEXTCOLOR', (0, i), (1, i), COLOR_TEXTO))       # # y CÓDIGO en blanco/claro
+                    estilos.append(('TEXTCOLOR', (2, i), (2, i), COLOR_GRIS))        # CLIENTE en gris atenuado
+                    estilos.append(('TEXTCOLOR', (3, i), (3, i), neon_color))        # DÍAS en color neón
+                    estilos.append(('BOX', (2, i), (2, i), 0.8, neon_color))         # Recuadro neón más fino para CLIENTE
+                    estilos.append(('FONT', (3, i), (3, i), 'Helvetica-Bold', 10))   # DÍAS en negrita fuente 10
                 except:
                     bg_color = COLOR_FILA_ALT if i % 2 == 0 else COLOR_FONDO
                     estilos.append(('BACKGROUND', (0, i), (-1, i), bg_color))
-                    estilos.append(('TEXTCOLOR', (0, i), (-1, i), COLOR_TEXTO))
+                    estilos.append(('TEXTCOLOR', (0, i), (1, i), COLOR_TEXTO))
+                    estilos.append(('TEXTCOLOR', (2, i), (2, i), COLOR_GRIS))
 
             tabla.setStyle(TableStyle(estilos))
             w, h = tabla.wrapOn(self.c, self.ancho, self.alto)
