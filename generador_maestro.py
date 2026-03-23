@@ -44,15 +44,18 @@ MIS_RUTAS = [
     "02.09. CANTI",
 ]
 
-# Colores del diseño
-COLOR_HEADER     = colors.HexColor('#1B3A5C')
-COLOR_SUBHEADER  = colors.HexColor('#2C5F8A')
-COLOR_ACCENT     = colors.HexColor('#E8F0FE')
-COLOR_FILA_ALT   = colors.HexColor('#F5F8FC')
-COLOR_TEXTO      = colors.HexColor('#1A1A1A')
-COLOR_GRIS       = colors.HexColor('#666666')
-COLOR_ROJO       = colors.HexColor('#C0392B')
-COLOR_VERDE      = colors.HexColor('#27AE60')
+# Colores del diseño (Tema Oscuro "Diamante Pro")
+COLOR_FONDO      = colors.HexColor('#0B132B')
+COLOR_HEADER     = colors.HexColor('#171B36')
+COLOR_SUBHEADER  = colors.HexColor('#00E5FF')
+COLOR_ACCENT     = colors.HexColor('#1F2544')
+COLOR_FILA_ALT   = colors.HexColor('#121629')
+COLOR_TEXTO      = colors.HexColor('#E2E8F0')
+COLOR_GRIS       = colors.HexColor('#8B94B6')
+COLOR_ROJO       = colors.HexColor('#FF1744')
+COLOR_VERDE      = colors.HexColor('#00E676')
+COLOR_AMARILLO   = colors.HexColor('#FFD600')
+COLOR_BORDE      = colors.HexColor('#2A3258')
 
 # ============================================================
 # FUNCIONES AUXILIARES
@@ -241,6 +244,7 @@ class ReportePDF:
         self.ancho, self.alto = letter
         self.c = canvas.Canvas(path, pagesize=letter)
         self.pagina = 1
+        self._repintar_fondo()
         self.y = self.alto - 80
         self._dibujar_header()
 
@@ -253,8 +257,14 @@ class ReportePDF:
         self._dibujar_footer()
         self.c.showPage()
         self.pagina += 1
+        self._repintar_fondo()
         self.y = self.alto - 80
         self._dibujar_header()
+
+    def _repintar_fondo(self):
+        """Pinta el fondo oscuro en toda la página."""
+        self.c.setFillColor(COLOR_FONDO)
+        self.c.rect(0, 0, self.ancho, self.alto, fill=True, stroke=False)
 
     def _verificar_espacio(self, necesario=60):
         """Si no hay espacio suficiente, salta a nueva página."""
@@ -407,7 +417,7 @@ class ReportePDF:
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
                 ('FONTSIZE', (0, 1), (-1, -1), 7.5),
                 ('TEXTCOLOR', (0, 1), (-1, -1), COLOR_TEXTO),
-                ('GRID', (0, 0), (-1, -1), 0.3, colors.HexColor('#CCCCCC')),
+                ('GRID', (0, 0), (-1, -1), 0.3, COLOR_BORDE),
                 ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
                 ('TOPPADDING', (0, 0), (-1, -1), 3),
                 ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
@@ -482,7 +492,7 @@ class ReportePDF:
                 ('BACKGROUND', (0, 0), (-1, 0), COLOR_HEADER),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
                 ('FONTSIZE', (0, 1), (-1, -1), 7),
-                ('GRID', (0, 0), (-1, -1), 0.3, colors.HexColor('#CCCCCC')),
+                ('GRID', (0, 0), (-1, -1), 0.3, COLOR_BORDE),
                 ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
                 ('TOPPADDING', (0, 0), (-1, -1), 2),
                 ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
@@ -491,12 +501,12 @@ class ReportePDF:
                 ('ALIGN', (3, 0), (3, -1), 'CENTER'),
             ]
 
-            COLOR_VERDE_CLARO = colors.HexColor('#D4EDDA')
-            COLOR_VERDE_TEXTO = colors.HexColor('#155724')
-            COLOR_AMARILLO_CLARO = colors.HexColor('#FFF3CD')
-            COLOR_AMARILLO_TEXTO = colors.HexColor('#856404')
-            COLOR_ROJO_CLARO = colors.HexColor('#F8D7DA')
-            COLOR_ROJO_TEXTO = colors.HexColor('#721C24')
+            COLOR_VERDE_CLARO = colors.HexColor('#00331A')
+            COLOR_VERDE_TEXTO = COLOR_VERDE
+            COLOR_AMARILLO_CLARO = colors.HexColor('#332B00')
+            COLOR_AMARILLO_TEXTO = COLOR_AMARILLO
+            COLOR_ROJO_CLARO = colors.HexColor('#4A0B16')
+            COLOR_ROJO_TEXTO = COLOR_ROJO
 
             for i in range(1, len(tabla_data)):
                 try:
@@ -511,7 +521,7 @@ class ReportePDF:
                         bg_color = COLOR_ROJO_CLARO
                         txt_color = COLOR_ROJO_TEXTO
                 except:
-                    bg_color = COLOR_FILA_ALT if i % 2 == 0 else colors.white
+                    bg_color = COLOR_FILA_ALT if i % 2 == 0 else COLOR_FONDO
                     txt_color = COLOR_TEXTO
                     
                 estilos.append(('BACKGROUND', (0, i), (-1, i), bg_color))
