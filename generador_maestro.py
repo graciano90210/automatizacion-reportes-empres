@@ -273,15 +273,15 @@ class ReportePDF:
 
         # Texto del header
         c.setFillColor(colors.white)
-        c.setFont('Helvetica-Bold', 16)
-        c.drawString(self.MARGEN, self.alto - 30, f"▸ {self.nombre_ruta}")
+        c.setFont('Helvetica-Bold', 15)
+        c.drawString(self.MARGEN, self.alto - 25, f"▸ {self.nombre_ruta}")
         c.setFont('Helvetica', 10)
-        c.drawString(self.MARGEN, self.alto - 50, "INFORME DIARIO POR RUTA")
+        c.drawString(self.MARGEN, self.alto - 45, "INFORME DIARIO POR RUTA")
 
         c.setFont('Helvetica-Bold', 11)
-        c.drawRightString(self.ancho - self.MARGEN, self.alto - 30, self.fecha)
+        c.drawRightString(self.ancho - self.MARGEN, self.alto - 25, f"Datos del: {self.fecha}")
         c.setFont('Helvetica', 8)
-        c.drawRightString(self.ancho - self.MARGEN, self.alto - 50, "Generado automáticamente")
+        c.drawRightString(self.ancho - self.MARGEN, self.alto - 45, f"Generado: {datetime.now().strftime('%d/%m/%Y %H:%M')}")
 
         self.y = self.alto - 95
 
